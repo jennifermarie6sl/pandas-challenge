@@ -58,27 +58,22 @@ limited_df.sort_values("SN", inplace = True)
 # dropping ALL duplicate values
 drop_dupes_df= limited_df.drop_duplicates(subset =["SN"],
                      keep = 'first')
-#drop_dupes_df
 
 #calc total: Total Count
 grouped_by_gender = drop_dupes_df.groupby("Gender")
-#grouped_by_gender.head()
 
 #Calcs:
-total_gender = grouped_by_gender.count()
-total_gender
+total_gender = grouped_by_gender.count()["SN"].values
+#total_gender
 summed_gender = total_gender.sum()
-summed_gender
+#summed_gender
 percent_per_gender = (total_gender / summed_gender) *100
-percent_per_gender
+#percent_per_gender
 
-#DataFrame:
-gender_purchasing_analysis = pd.DataFrame({"Total Count": [total_gender], 
-                                    "Percentage of Players": [percent_per_gender]})
-
-#Format:
-#gender_purchasing_analysis["Percentage of Players"] = gender_purchasing_analysis["Percentage of Players"].astype(float).map("{:.2f}%".format)
-gender_purchasing_analysis = gender_purchasing_analysis.sort_values(["Total Count"], ascending=False)
-
-#Need to get the group by working*********************************************
-#Need to fix the formatting*******************************
+#DataFrame Appending and Formatting:
+gg = grouped_by_gender.count()
+gg["Percentage of Players"]= percent_per_gender
+gender_purchasing_analysis = gg.sort_values(["SN"], ascending=False)
+gender_purchasing_analysis["Percentage of Players"] = gender_purchasing_analysis["Percentage of Players"].astype(float).map("{:.2f}%".format)
+gender_purchasing_analysis
+gender_purchasing_analysis.rename(columns={"SN": "Total Count"})
